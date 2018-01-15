@@ -5,6 +5,11 @@ export default  {
         user:'root',
         password:'root',
         database:'book'
+    },
+    session: {                   
+        secret: 'book', 
+        key: 'book',
+        maxAge: 10*60*1000
     }
 };
 

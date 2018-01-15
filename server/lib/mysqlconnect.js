@@ -4,8 +4,8 @@ import mysql from 'mysql';
 
 let connection = mysql.createConnection(config.mysql);
 
-connection.connect(function(err){
-    if (err) {
+connection.connect(function (err) {
+	if (err) {
 		console.log('数据库连接错误')
 	}
 
