@@ -22,13 +22,15 @@ let create = (req, res) => {
             });
         }
     }
-    if (req.body.Rno === '') {
+    if (req.body.Rname === '') {
         res.json({
             result: false,
-            message: '读者号不能为空'
+            message: '读者名不能为空'
         });
     }
-    readerModel.select(req.body, register);
+    readerModel.select({
+        Rname: req.body.Rname
+    }, register);
 }
 /* 登录
 1. 是否有该账号
@@ -36,6 +38,7 @@ let create = (req, res) => {
 */
 let login = (req, res) => {
     let login = (error, results) => {
+        console.log(results)
         if (!results.length) {
             res.json({
                 result: false,
@@ -43,7 +46,9 @@ let login = (req, res) => {
             });
         } else {
             if (req.body.password === results[0].password) {
-                req.session.user = results[0];
+                // console.log(results[0].Rno,23423)
+                req.session.userid = results[0].Rno;
+                // console.log(req.session.userid,154554222)
                 res.json({
                     result: true,
                     message: '登录成功'
@@ -56,7 +61,10 @@ let login = (req, res) => {
             }
         }
     }
-    readerModel.select(req.body, login);
+
+    readerModel.select({
+        Rname: req.body.Rname
+    }, login);
 }
 let logout = (req, res) => {
     req.session.user = null;
@@ -71,9 +79,18 @@ let logout = (req, res) => {
 3. 该书是否可借
 */
 let borrow = (req, res) => {
-    let book = (error, results) => {
+    let borrow = async (error, results) => {
         if (error) throw error;
-        if (!result.length) {
+        await bookModel.update(['已借出',req.body.Bno]);
+        res.json({
+            result: true,
+            message: '借阅成功'
+        })
+    }
+
+    let book = async(error, results) => {
+        if (error) throw error;
+        if (!results.length) {
             res.json({
                 result: false,
                 message: '该书不存在'
@@ -83,19 +100,17 @@ let borrow = (req, res) => {
                 result: false,
                 message: '该书已借出'
             })
+        } else {
+            await borrowModel.insert(
+                Object.assign(req.body,{Rno:req.session.userid}, {
+                    Bdate: new Date()
+                }),
+                borrow);
         }
     }
 
-    (async() => {
-        await bookModel.selectbyno(req.body, book);
-        await borrowModel.insert(Object.assign(req.body, req.session.user));
-        res.json({
-            result: true,
-            message: '借阅成功'
-        })
-    })().catch((err) => {
-        throw err
-    })
+    bookModel.selectbyno(req.body, book);
+
 }
 /*借阅情况
  */
@@ -109,7 +124,7 @@ let select = (req, res) => {
     }
     (async() => {
         await borrowModel.selectbyreader({
-            Rno: req.session.user.Rid
+            Rno: req.session.userid
         }, seletB);
     })().catch((err) => {
         throw err

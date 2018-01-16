@@ -1,0 +1,13 @@
+#login{
+    width:100%;
+    height:602px;
+    background-image:url(../image/sun.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+.center{
+    position: absolute;
+    top: 50%;
+    height: 50%;
+}

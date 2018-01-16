@@ -23,7 +23,7 @@ let remove = function (reader) {
 
 //登录的时候，查找账号和密码 {Rname}
 let select = (reader, callback) => {
-    let select = `select * from reader where Rno= "${reader.Rname}"`
+    let select = `select * from reader where Rname= "${reader.Rname}"`
     connection.query(
         select,
         callback

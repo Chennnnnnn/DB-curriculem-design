@@ -11,9 +11,6 @@ const app = express();
 
 // 静态文件路径
 // app.use(express.static(__dirname + '../src'));
-
-
-// 设置跨域
 app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", null);
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -23,19 +20,24 @@ app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
+
+// 设置跨域
+
+
 //修改请求体大小限制 
 app.use(bodyParser.urlencoded({ extended: false })); 
 //cookie,session
 app.use(cookieParser());
 app.use(session({
-    // resave: true,
-    // saveUninitialized: true,
-    name: config.session.name,
-    secret: config.session.secret,
-    cookie: {
-        maxAge: config.session.maxAge
-    }
+  resave: true,
+  saveUninitialized: true,
+  name: config.session.name,
+  secret: config.session.secret,
+  cookie: {
+      maxAge: config.session.maxAge
+  }
 }));
+
 
 //设置路由
 routes(app);

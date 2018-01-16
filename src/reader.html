@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>图书管理系统</title>
     <script src="./js/jquery.js"></script>
     
 </head>
 <body>
     <script>
-        var baseUrl = 'http://localhost:3000/'
+        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
+        //withCredentials用来支持传送cookie，默认是不支持的
+        var baseUrl = 'http://localhost:3000/reader/'
         $.ajax({
-            url: baseUrl + 'login',
+            url: baseUrl + 'getBrow',
             type: 'post',
             data: {
-                Rno: '110',
-                Rname:'lili',
+                Rname:'',
                 password:'123456'
             },
             dataType:"json",

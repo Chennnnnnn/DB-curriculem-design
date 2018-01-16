@@ -1,28 +1,125 @@
 import express from 'express';
-import {query} from '../lib/mysqlconnect';
+import connection from '../lib/mysqlconnect';
 
 import bookModel from '../models/book';
 import borrowModel from '../models/borrow';
 import pressModel from '../models/press';
+import {
+    fail
+} from 'assert';
+import {
+    error
+} from 'util';
+import {
+    connect
+} from 'net';
 
-/*还书，删除借阅记录
-1. 是否存在该记录
-2. 存在则删除
-*/
+/*登录
+ */
+let login = (req, res) => {
+    let login = (error, results) => {
+        if (!results.length) {
+            res.json({
+                result: false,
+                message: '该账户不存在'
+            });
+        } else {
+            if (req.body.password === results[0].password) {
+                req.session.userid = results[0].account;
+                res.json({
+                    result: true,
+                    message: '登录成功'
+                })
+            } else {
+                res.json({
+                    result: false,
+                    message: '账号或密码不正确'
+                })
+            }
+        }
+    }
+    let select = `select * from admin where account = "${request.body.account}"`
+    connection.query(select, login);
+}
 
-
+/*登出
+ */
+let logout = (req, res) => {
+    req.session.user = null;
+    res.json({
+        result: true,
+        message: '注销成功'
+    });
+}
 
 //添加图书
+
+let addBook = (req, res) => {
+    let addBook = (error, results) => {
+        if (error) throw error;
+        res.json({
+            result: true,
+            messageL: {
+                Bno: result.Bno
+            }
+        })
+    }
+    if (req.body.Bname == '') {
+        res.json({
+            result: false,
+            message: '书名不能为空'
+        })
+    } else if (req.body.Baddress == '') {
+        res.json({
+            result: false,
+            message: '图书位置不能为空'
+        })
+    } else {
+        bookModel.insert(Object.assign(req.body, {
+            Bstate: '可借出'
+        }))
+    }
+}
+
 /*添加出版社
 1. 是否存在该出版社
 2. 无则添加
 */
+let addPress = (req, res) => {
+    let add = (error, results) => {
+        if (error) throw error;
+        if (!results.length) {
+            pressModel.insert(, (error, results) => {
+                if (error) throw error;
+                res.json({
+                    result: true,
+                    messageL: results[0].Pno
+                })
+            })
+        } else {
+            res.json({
+                result: true,
+                messageL: '已存在该出版社'
+            })
+        }
+    }
+    pressModel.select(req.body, add);
+}
 
-/*修改图书信息
-1. 查找是否存在该书
-2. 若存在则，修改
-*/
 
+// 查看出版社信息
+let getPress = (req, res) => {
+    let get = (error, results) => {
+        if (error) throw error;
+        res.json({
+            result: true,
+            message: results
+        })
+    }
+
+    let select = `select * from press`
+    connection.query(select, get);
+}
 
 /*修改出版社信息
 1. 查找是否有该出版社
@@ -30,15 +127,59 @@ import pressModel from '../models/press';
 */
 
 
-
-/*删除出版社信息
-1.查找是否有该出版社的书
-2. 有则不予删除
+/*
+查看所有借阅记录
 */
+let getBorrows = (req, res) => {
+    let getBorrows = (error, results) => {
+        if (error) throw error;
+        req.json({
+            result: true,
+            message: '修改成功'
+        })
+    }
+    let select = `select Bono,borrow.Bno,borrow.Rno,Bdate,Bname,Rname
+                  from borrow,book,reader
+                  where borrow.Bno = book.Bno
+                  and borrow.Rno =  reader.Rno`
+    connection.query(select, getBorrows);
+}
 
 
-
-/*删除图书信息
-1. 判断该书是否已经借
-2. 确定是否删除，连同该借阅记录
+/*还书，删除借阅记录
+1. 是否存在该记录
+2. 存在则删除
 */
+let returnBook = (req, res) => {
+    let update = (error, results) => {
+        if (error) throw error;
+        res.json({
+            result: true,
+            messageL: '还书成功'
+        })
+    }
+    let select = (error, results) => {
+        if (error) throw error;
+        if (!results.length) {
+            res.json({
+                result: false,
+                messageL: '不存在该书'
+            })
+        }
+    }
+    connection.query(`select * from borrow where Bono = "${req.body.Bono}"`,
+        async (error, results) => {
+            await bookModel.selectbyno(results[0].Bno, select);
+            await bookModel.update(['可借阅', results[0].Bno], update);
+        })   
+}
+
+export default {
+    login,
+    logout,
+    addBook,
+    addPress,
+    getPress,
+    getBorrows,
+    returnBook
+}

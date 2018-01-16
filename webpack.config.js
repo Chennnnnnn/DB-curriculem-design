@@ -5,7 +5,7 @@ var path = require('path');
 module.exports = {
   context: path.join(__dirname),
   devtool: debug ? "inline-sourcemap" : null,
-  entry: "./src/js/root.js",
+  entry: "./src/js/admin.js",
   module: {
     loaders: [
       {
@@ -20,12 +20,19 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader' 
+      },
+      {
+        test:/\.(png|jpg|jpeg|gif|svg|)$/i,
+        loader:'file-loader',
+        query:{
+          name: 'assets/[nem-[hash:5].[ext] '
+        }
       }
     ]
   },
   output: {
     path: __dirname,
-    filename: "./src/bundle.js"
+    filename: "./src/dist/admin.js"
   },
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
