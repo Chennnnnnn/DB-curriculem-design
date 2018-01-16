@@ -8,6 +8,7 @@ import RBook from './components/Rbook';
 import RborrowList from './components/RborrowList';
 import Rsearch from './components/Rsearch';
 import RLogin from './components/Rlogin';
+import Rborrow from './components/Rborrow';
 
 import 'antd/dist/antd.css';
 
@@ -26,13 +27,11 @@ export default class Root extends React.Component {
               Rname:'',
               password:''
             },
-            press:[]
+            books:[]
         }
         this.handleMenu = this.handleMenu.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
-
-    }
-    componentWillMount () {
+        this.handleBooks = this.handleBooks.bind(this);
 
     }
 
@@ -56,15 +55,15 @@ export default class Root extends React.Component {
       this.setState({menukey : item.key});
     }
 
-    handlePress (press) {
-      this.setState({press: press});
+    handleBooks (books) {
+      this.setState({books: books});
     }
 
 	render() {
       
 		return (
         <div>
-            {this.state.login?
+            {!this.state.login?
             <RLogin login={this.handleLogin}/>:
             <Layout className="layout">
             <Header>
@@ -92,9 +91,9 @@ export default class Root extends React.Component {
                 if (this.state.menukey == 1)
                     return <Rsearch />
                   else if (this.state.menukey == 2)
-                    return  <RBook />
+                    return  <RBook Books={this.handleBooks}/>
                     else if (this.state.menukey == 3) 
-                    return  <RborrowList/>
+                    return  <Rborrow books={this.state.books}/>
                   else return  <RborrowList/>
               })()}
             </Content>

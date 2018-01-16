@@ -2,6 +2,7 @@ import connection from '../lib/mysqlconnect';
 
 //增,先判断类型，长度borrow{Bno,Rno,Bdate},callback{Bono}
 let insert = (borrow, callback) => {
+    console.log(borrow);
     connection.query(
         'insert into borrow set ?',
         borrow,

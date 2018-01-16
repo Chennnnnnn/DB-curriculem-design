@@ -30,7 +30,7 @@ export default class Reader extends React.Component {
       let baseUrl = 'http://localhost:3000/';
       let that = this;
       $.ajax({
-          url: baseUrl + 'getAllBooks',
+          url: baseUrl + 'admin/getReaders',
           type: 'get',
           dataType:"json",
           success:function(data){
@@ -41,9 +41,9 @@ export default class Reader extends React.Component {
 
     handlebooks (message) {
         message.map((item,value) => {
-            item.key = item.Bno
+            item.key = item.Rno
         })
-        this.setState({books:message})
+        this.setState({readers:message})
     }
     handleRname (e) {
         this.setState({Rname: e.target.value});
@@ -57,7 +57,10 @@ export default class Reader extends React.Component {
         $.ajax({
             url: 'http://localhost:3000/reader/register',
             type: 'post',
-            data: this.state,
+            data: {
+                Rname:this.state.Rname,
+                password: this.state.password
+            },
             dataType:"json",
             success:function(data){
                 if (data.result) {
@@ -75,15 +78,12 @@ export default class Reader extends React.Component {
     render () {
         const columns = [{
             title: '读者号',   
-            dataIndex: 'name',
+            dataIndex: 'Rno',
             render: text => <a href="#">{text}</a>,
           }, {
             title: '读者名',
             className: 'column-money',
-            dataIndex: 'Bname',
-          },{
-            title: '操作',
-            dataIndex: 'address',
+            dataIndex: 'Rname',
           }];
           
 

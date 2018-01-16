@@ -39,6 +39,7 @@ export default class Book extends React.Component {
             item.key = item.Bno
         })
         this.setState({books:message})
+        this.props.Books(message);
     }
 
 
@@ -61,7 +62,6 @@ export default class Book extends React.Component {
             title: '状态',
             dataIndex: 'Bstate',
           }];
-
         return (
             <div>
                 <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>

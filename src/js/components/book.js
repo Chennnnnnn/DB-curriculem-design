@@ -85,7 +85,7 @@ export default class Book extends React.Component {
                 })
                 that.getAllbook();       
             } 
-            alert(data.message);
+            alert('添加成功');
           }
       });
     }

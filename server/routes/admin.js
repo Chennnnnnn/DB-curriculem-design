@@ -94,7 +94,7 @@ let addPress = (req, res) => {
                 if (error) throw error;
                 res.json({
                     result: true,
-                    messageL: results[0].Pno
+                    messageL: '添加成功'
                 })
             })
         } else {

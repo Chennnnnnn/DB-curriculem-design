@@ -43,7 +43,11 @@ export default class Press extends React.Component {
           url: baseUrl + 'addPress',
           type: 'post',
           dataType:"json",
-          data: this.state,
+          data: {
+            Pname:this.state.Pname,
+            Pphone:this.state.Pphone,
+            Paddress: this.state.Paddress
+          },
           success:function(data){
             if (data.result) {
                 that.setState({
@@ -53,7 +57,7 @@ export default class Press extends React.Component {
                 })
                 that.getPress();       
             } 
-            alert(data.message);   
+            alert(data.messageL);   
           }
       });
     }

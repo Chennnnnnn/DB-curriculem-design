@@ -35,7 +35,7 @@ export default class Login extends React.Component {
             <div id='login'>
               <div className="center">
               <h2>图书管理系统</h2>
-              <h6>读者登录页</h6>
+              <h6>管理员登录页</h6>
               <Row className="row">
               <Col span={4} ><label>账号</label></Col>
               <Col span={16} ><Input onChange={this.handleAccount} /></Col>

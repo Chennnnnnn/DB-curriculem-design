@@ -7,83 +7,74 @@ import $ from 'jquery';
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 
-export default class Press extends React.Component {
-    constructor () {
-        super();
+export default class Rborrow extends React.Component {
+    constructor (props) {
+        super(props);
+        let Bnos = [];
+        this.props.books.forEach((item) => {
+            Bnos.push(item.Bno);
+        })
         this.state= {
-            press:[],
-            Pname:'',
-            Pphone:'',
-            Paddress:''
+            Bnos:Bnos,
+            Bno:''
         }
-        this.getPress = this.getPress.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
+        this.handleBorrow = this.handleBorrow.bind(this);
+        this.handleChangeSelect = this.handleChangeSelect.bind(this);
         $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
-    componentWillMount () {
-        this.getPress(); 
-    }
-    getPress () {
-      
-      let baseUrl = 'http://localhost:3000/admin/';
-      let that = this;
-      $.ajax({
-          url: baseUrl + 'getPresses',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
-            data.result?that.setState({press: data.message}):alert(data.message);    
-          }
-      });
+    componentWillReceiveProps(nextProps) {
+        let Bnos = [];
+        nextProps.books.forEach((item) => {
+            Bnos.push(item.Bno);
+        })
+        console.log(Bnos)
+        this.setState({Bnos: Bnos});
     }
 
+    handleChangeSelect (value) {
+        this.setState({Bno: value});
+    }
+
+    handleBorrow () {
+        let that = this
+        $.ajax({
+            url:'http://localhost:3000/reader/borrow',
+            type:'post',
+            datatype:'json',
+            data: {
+                Bno: that.state.Bno,
+                Rno: that.state.Rno
+            },
+            success: function (data) {
+                alert(data.message);
+            }
+        })
+    }
     render () {
-          
+
+        const options =[] 
+        this.state.Bnos.forEach((item,index) =>{
+            options.push( <Option value={item}>{item}</Option>);
+        })
+
         return (
-            <div>
-            <Tabs defaultActiveKey="1" onChange={this.callback}>
-                <TabPane tab="出版社信息" key="1">
-                    <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                        <Table
-                        columns={columns}
-                        dataSource={this.state.press}
-                        bordered
-                        pagination={false}
-                        />
-                    </div>
-                </TabPane>
-                <TabPane tab="添加出版社" key="2">
-                    <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                        <Row justify="center" align="middle">
-                            <Col span={2} offset={8}>
-                              <label>出版社名称</label>
-                            </Col>
-                            <Col span={6}>
-                              <Input onChange={(e)=>{this.setState({Pname: e.target.value})}}/>
-                            </Col>
-                        </Row>
-                        <Row justify="center" align="middle">
-                            <Col span={2} offset={8}>
-                              <label>电话</label>
-                            </Col>
-                            <Col span={6}>
-                            <Input onChange={(e)=>{this.setState({Pphone: e.target.value})}} />
-                            </Col>
-                        </Row>
-                        <Row justify="center" align="middle">
-                            <Col span={2} offset={8}>
-                              <label>位置</label>
-                            </Col>
-                            <Col span={6}>
-                              <Input onChange={(e)=>{this.setState({Paddress: e.target.value})}}/>
-                            </Col>
-                        </Row>
-                        <Col span={4} offset={8}>
-                           <Button type="primary" onClick={this.handleAdd}>添加</Button>
+            <div style={{ background: '#fff', padding: 24, minHeight: 300 }}>
+
+                    <Row >
+                        <Col span={2} offset={6}>
+                            <label>图书号</label>
                         </Col>
-                    </div>
-                </TabPane>
-            </Tabs>
+                        <Col span={6}>
+                            <Select style={{ width: 200,marginLeft: 0 }} 
+                                    onChange= {this.handleChangeSelect}>
+                                {options}
+                            </Select>
+                        </Col>
+                        <Col span={2}>
+                          <Button onClick={this.handleBorrow}>借阅</Button>
+                        </Col>
+                    </Row>
+
             </div>
         )
     }

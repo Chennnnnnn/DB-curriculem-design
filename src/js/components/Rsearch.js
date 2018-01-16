@@ -22,7 +22,7 @@ export default class Rsearch extends React.Component {
       let that = this;
       $.ajax({
           url: baseUrl + 'searchBook',
-          type: 'get',
+          type: 'post',
           dataType:"json",
           data:{
               Bname: value

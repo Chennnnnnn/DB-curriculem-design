@@ -28,10 +28,16 @@ let create = (req, res) => {
             result: false,
             message: '读者名不能为空'
         });
-    }
-    readerModel.select({
-        Rname: req.body.Rname
-    }, register);
+    } else if (req.body.password === ''){
+        res.json({
+            result: false,
+            message: '读者名不能为空'
+        });
+    } else {
+       readerModel.select({
+           Rname: req.body.Rname
+       }, register); 
+   }
 }
 /* 登录
 1. 是否有该账号
@@ -80,16 +86,22 @@ let logout = (req, res) => {
 3. 该书是否可借
 */
 let borrow = (req, res) => {
-    let borrow = async (error, results) => {
+    let borrow =  (error, results) => {
+        console.log(results,1111111111);
         if (error) throw error;
-        await bookModel.update(['已借出',req.body.Bno]);
-        res.json({
-            result: true,
-            message: '借阅成功'
-        })
+         bookModel.update(['已借出',req.body.Bno],
+            (error,results) => {
+                console.log(results,1100001);
+                if (error) {throw error};
+                res.json({
+                result: true,
+                message: '借阅成功'
+                })
+        });
+        
     }
 
-    let book = async(error, results) => {
+    let book = (error, results) => {
         if (error) throw error;
         if (!results.length) {
             res.json({
@@ -101,8 +113,9 @@ let borrow = (req, res) => {
                 result: false,
                 message: '该书已借出'
             })
-        } else {
-            await borrowModel.insert(
+        } 
+        else {
+            borrowModel.insert(
                 Object.assign(req.body,{Rno:req.session.userid}, {
                     Bdate: new Date()
                 }),
@@ -132,7 +145,6 @@ let select = (req, res) => {
         throw err
     })
 }
-
 
 export default {
     create, //注册

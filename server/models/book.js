@@ -3,7 +3,7 @@ import connection from '../lib/mysqlconnect';
 
 //增,{Bname, Pno, Baddress}，callback获取Bno
 let insert = (book, callback) => {
-    book.Bstate = '可借出'
+    book.Bstate = '可借阅'
     connection.query(
         'insert into book set ?',
         book,
@@ -24,7 +24,9 @@ let remove = function (book) {
 
 //查,书名Bname {Bname:'书的名字'}
 let selectbyname = (book, callback) => {
-    let select = `select * from book where Bname = "${book.Bname}"`
+    let select = `select book.Pno,Bname,Bstate,Baddress,Pname,Bno
+                  from book,press 
+                  where Bname = "${book.Bname}" and book.Pno = press.Pno`
     connection.query(
         select,
         callback
@@ -33,6 +35,7 @@ let selectbyname = (book, callback) => {
 
 let selectbyno = (book, callback) => {
     let select = `select * from book where Bno = "${book.Bno}"`
+    console.log(select)
     connection.query(
         select,
         callback
