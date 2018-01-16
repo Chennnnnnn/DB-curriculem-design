@@ -12,10 +12,10 @@ export default class Login extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            account:'',
+            Rname:'',
             password:''
         }
-        this.handleAccount = this.handleAccount.bind(this);
+        this.handleRname = this.handleRname.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
         
@@ -23,8 +23,8 @@ export default class Login extends React.Component {
     handleClick () {
         this.props.login(this.state);
     }
-    handleAccount (e) {
-      this.setState({account : e.target.value})
+    handleRname (e) {
+      this.setState({Rname : e.target.value})
     }
     handlePassword (e) {
       this.setState({password : e.target.value})
@@ -38,7 +38,7 @@ export default class Login extends React.Component {
               <h6>读者登录页</h6>
               <Row className="row">
               <Col span={4} ><label>账号</label></Col>
-              <Col span={16} ><Input onChange={this.handleAccount} /></Col>
+              <Col span={16} ><Input onChange={this.handleRname} /></Col>
               </Row>
               <Row className="row">
               <Col span={4} ><label>密码</label></Col>

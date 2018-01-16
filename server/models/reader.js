@@ -3,6 +3,7 @@ import connection from '../lib/mysqlconnect';
 
 //增,先判断类型，长度reader{Rname,password},callback获取Rno
 let insert = (reader,callback) => {
+    console.log(reader)
     connection.query(
         'insert into reader set ?',
         reader,

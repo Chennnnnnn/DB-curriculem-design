@@ -25,7 +25,7 @@ let login = (req, res) => {
             });
         } else {
             if (req.body.password === results[0].password) {
-                req.session.userid = results[0].account;
+                req.session.userid = 'admin';
                 res.json({
                     result: true,
                     message: '登录成功'
@@ -38,7 +38,7 @@ let login = (req, res) => {
             }
         }
     }
-    let select = `select * from admin where account = "${request.body.account}"`
+    let select = `select * from admin where account = "${req.body.account}"`
     connection.query(select, login);
 }
 
@@ -55,12 +55,13 @@ let logout = (req, res) => {
 //添加图书
 
 let addBook = (req, res) => {
+    console.log(req.body);
     let addBook = (error, results) => {
         if (error) throw error;
         res.json({
             result: true,
-            messageL: {
-                Bno: result.Bno
+            message: {
+                Bno: results.insertId
             }
         })
     }
@@ -77,7 +78,7 @@ let addBook = (req, res) => {
     } else {
         bookModel.insert(Object.assign(req.body, {
             Bstate: '可借出'
-        }))
+        }),addBook);
     }
 }
 
@@ -89,7 +90,7 @@ let addPress = (req, res) => {
     let add = (error, results) => {
         if (error) throw error;
         if (!results.length) {
-            pressModel.insert(, (error, results) => {
+            pressModel.insert(req.body, (error, results) => {
                 if (error) throw error;
                 res.json({
                     result: true,
@@ -133,9 +134,9 @@ let getPress = (req, res) => {
 let getBorrows = (req, res) => {
     let getBorrows = (error, results) => {
         if (error) throw error;
-        req.json({
+        res.json({
             result: true,
-            message: '修改成功'
+            message: results
         })
     }
     let select = `select Bono,borrow.Bno,borrow.Rno,Bdate,Bname,Rname
@@ -149,29 +150,37 @@ let getBorrows = (req, res) => {
 /*还书，删除借阅记录
 1. 是否存在该记录
 2. 存在则删除
+req.Bono
 */
 let returnBook = (req, res) => {
     let update = (error, results) => {
         if (error) throw error;
         res.json({
             result: true,
-            messageL: '还书成功'
+            message: '还书成功'
         })
     }
-    let select = (error, results) => {
+    let remove = (error, results) => {
         if (error) throw error;
-        if (!results.length) {
-            res.json({
-                result: false,
-                messageL: '不存在该书'
-            })
-        }
     }
     connection.query(`select * from borrow where Bono = "${req.body.Bono}"`,
         async (error, results) => {
-            await bookModel.selectbyno(results[0].Bno, select);
+            await borrowModel.remove(req.body, remove);
             await bookModel.update(['可借阅', results[0].Bno], update);
         })   
+}
+
+//查看全部读者
+let getReaders = (req,res) => {
+    let getReader = (error, results) => {
+        if(error) throw error;
+        res.json({
+            result: true,
+            message: results                             
+        })
+    }
+    let select = `select Rno,Rname from reader`
+    connection.query(select, getReader); 
 }
 
 export default {
@@ -181,5 +190,6 @@ export default {
     addPress,
     getPress,
     getBorrows,
-    returnBook
+    returnBook,
+    getReaders
 }

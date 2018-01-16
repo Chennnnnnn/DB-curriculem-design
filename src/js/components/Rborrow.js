@@ -36,44 +36,8 @@ export default class Press extends React.Component {
           }
       });
     }
-    handleAdd () {
-      let baseUrl = 'http://localhost:3000/admin/';
-      let that = this;
-      $.ajax({
-          url: baseUrl + 'addPress',
-          type: 'post',
-          dataType:"json",
-          data: this.state,
-          success:function(data){
-            if (data.result) {
-                that.setState({
-                    Pname: '',
-                    Pphone: '',
-                    Paddress: ''
-                })
-                that.getPress();       
-            } 
-            alert(data.message);   
-          }
-      });
-    }
 
     render () {
-        const columns = [{
-            title: '编号',
-            dataIndex: 'Pno',
-            render: text => <a href="#">{text}</a>,
-          }, {
-            title: '出版社名称',
-            className: 'column-money',
-            dataIndex: 'Pname',
-          }, {
-            title: '电话',
-            dataIndex: 'Pphone',
-          },{
-            title: '地址',
-            dataIndex: 'Paddress',
-          }];
           
         return (
             <div>
@@ -125,21 +89,5 @@ export default class Press extends React.Component {
     }
 }
 
-// const data = [{
-//     key: '1',
-//     Pno: 'John Brown',
-//     Pname: '￥300,000.00',
-//     Pphone: 'New York No. 1 Lake Park',
-//    }, {
-//     key: '2',
-//     Pno: 'Jim Green',
-//     Pname: '￥1,256,000.00',
-//     Pphone: 'London No. 1 Lake Park',
-//    }, {
-//     key: '3',
-//     Pno: 'Joe Black',
-//     Pname: '￥120,000.00',
-//     Pphone: 'Sidney No. 1 Lake Park',
-//    }];
 
 

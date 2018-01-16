@@ -9,13 +9,12 @@ let insert = (borrow, callback) => {
     )
 };
 //删,借书记录 {Bono}
-let remove = (borrow) => {
-    let select = `delete from borrow where Bono = "${borrow.Bono}"`
+let remove = (borrow,callback) => {
+    let select = `delete from borrow where Bono = "${borrow.Bono}"`;
+    console.log(select);
     connection.query(
         select,
-        function (error, results, fields) {
-            if (error) throw error;
-        }
+        callback
     )
 };
 

@@ -9,22 +9,7 @@
     
 </head>
 <body>
-    <script>
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
-        //withCredentials用来支持传送cookie，默认是不支持的
-        var baseUrl = 'http://localhost:3000/reader/'
-        $.ajax({
-            url: baseUrl + 'getBrow',
-            type: 'post',
-            data: {
-                Rname:'',
-                password:'123456'
-            },
-            dataType:"json",
-            success:function(data){
-                console.log(data);
-            }
-        });
-    </script>
+    <div id="root"></div>
+    <script src="./dist/reader.js"></script>
 </body>
 </html>

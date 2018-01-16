@@ -201,7 +201,7 @@
     message:{[
         Pno: '5'
         Pname:'高等教育出版社',
-        Phone:'10000001',
+        Pphone:'10000001',
         Paddress:'广州'
     ]}
 }
@@ -243,7 +243,7 @@
 //查看图书
 ```
 {
-    url: '/admin/getAllBooks',
+    url: '/getAllBooks',
     type: 'get'
 }
 {

@@ -3,6 +3,7 @@ import connection from '../lib/mysqlconnect';
 import readerModel from '../models/reader';
 import borrowModel from '../models/borrow';
 import bookModel from '../models/book';
+import { error } from 'util';
 
 /* 注册 {}
 1. 是否已存在该读者号
@@ -115,6 +116,7 @@ let borrow = (req, res) => {
 /*借阅情况
  */
 let select = (req, res) => {
+    console.log(req.session);
     let seletB = (error, results) => {
         if (error) throw error;
         res.json({
@@ -131,10 +133,11 @@ let select = (req, res) => {
     })
 }
 
+
 export default {
     create, //注册
     login, //登录
     logout, //注销
     borrow, //借书
-    select //查找借书记录
+    select, //查找借书记录
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import jq from 'jquery';
+import $ from 'jquery';
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -11,22 +11,70 @@ export default class Reader extends React.Component {
     constructor () {
         super();
         this.state= {
-            books:{}
+            readers :[],
+            Rname: '',
+            password:''
         }
-        this.gettabs = this.gettabs.bind(this);
-        this.handleChangeSelect = this.handleChangeSelect.bind(this);
+        this.getReaders = this.getReaders.bind(this);
+        this.handlebooks = this.handlebooks.bind(this);
+        this.handleRname = this.handleRname.bind(this);
+        this.handlepassword = this.handlepassword.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
+        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
+    }
+    componentWillMount () {
+        this.getReaders(); 
     }
 
-    gettabs(key){
-        console.log(key);
+    getReaders () {
+      let baseUrl = 'http://localhost:3000/';
+      let that = this;
+      $.ajax({
+          url: baseUrl + 'getAllBooks',
+          type: 'get',
+          dataType:"json",
+          success:function(data){
+            data.result?that.handlebooks(data.message):alert(data.message);    
+          }
+      });
     }
-    handleChangeSelect(){
 
+    handlebooks (message) {
+        message.map((item,value) => {
+            item.key = item.Bno
+        })
+        this.setState({books:message})
+    }
+    handleRname (e) {
+        this.setState({Rname: e.target.value});
+    }
+    handlepassword (e) {
+        this.setState({password: e.target.value});
+    }
+    handleAdd () {
+        console.log('sdfsdfsd')
+        let that = this;
+        $.ajax({
+            url: 'http://localhost:3000/reader/register',
+            type: 'post',
+            data: this.state,
+            dataType:"json",
+            success:function(data){
+                if (data.result) {
+                    that.setState({
+                        Rname: '',
+                        password: ''
+                    })
+                    that.getReaders();       
+                } 
+                alert(data.message);   
+            }
+        });
     }
 
     render () {
         const columns = [{
-            title: '读者号',
+            title: '读者号',   
             dataIndex: 'name',
             render: text => <a href="#">{text}</a>,
           }, {
@@ -38,22 +86,7 @@ export default class Reader extends React.Component {
             dataIndex: 'address',
           }];
           
-          const data = [{
-            key: '1',
-            name: 'John Brown',
-            Bname: '￥300,000.00',
-            address: '删除',
-          }, {
-            key: '2',
-            name: 'Jim Green',
-            Bname: '￥1,256,000.00',
-            address: '删除',
-          }, {
-            key: '3',
-            name: 'Joe Black',
-            Bname: '￥120,000.00',
-            address: '删除',
-          }];
+
 
         return (
             <div>
@@ -62,10 +95,9 @@ export default class Reader extends React.Component {
                     <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
                         <Table
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.state.readers}
                         bordered
                         pagination={false}
-                        title={() => 'Header'}
                         />
                     </div>
                 </TabPane>
@@ -76,7 +108,7 @@ export default class Reader extends React.Component {
                               <label>账号</label>
                             </Col>
                             <Col span={6}>
-                              <Input placeholder="default size" />
+                              <Input onChange={this.handleRname} />
                             </Col>
                         </Row>
                         <Row >
@@ -84,11 +116,11 @@ export default class Reader extends React.Component {
                               <label>密码</label>
                             </Col>
                             <Col span={6}>
-                              <Input placeholder="default size" />
+                              <Input onChange={this.handlepassword} />
                             </Col>
                         </Row>
                         <Col span={4} offset={8}>
-                           <Button type="primary">添加</Button>
+                           <Button type="primary" onClick={this.handleAdd}>添加</Button>
                         </Col>
                     </div>
                 </TabPane>
@@ -97,3 +129,19 @@ export default class Reader extends React.Component {
         )
     }
 }
+// const data = [{
+//     key: '1',
+//     name: 'John Brown',
+//     Bname: '￥300,000.00',
+//     address: '删除',
+//   }, {
+//     key: '2',
+//     name: 'Jim Green',
+//     Bname: '￥1,256,000.00',
+//     address: '删除',
+//   }, {
+//     key: '3',
+//     name: 'Joe Black',
+//     Bname: '￥120,000.00',
+//     address: '删除',
+//   }];

@@ -40,14 +40,11 @@ let selectbyno = (book, callback) => {
 };
 
 //改 ['已借出','4'],借出归还，修改状态
-let update = function (book) {
+let update = function (book,callback) {
     connection.query(
         'update book set  Bstate = ? where Bno = ?',
         book,
-        function (error, results, fields) {
-            if (error) throw error;
-            console.log(results);
-    })
+        callback);
 };
 
 

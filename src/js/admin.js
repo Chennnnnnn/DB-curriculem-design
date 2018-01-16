@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 // import {Router, Route, hashHistory} from 'react-router';
 import {Menu, Icon, Button} from 'antd';
 import { Layout, Breadcrumb } from 'antd';
+import $ from 'jquery';
 import Book from './components/book';
 import Reader from './components/reader';
 import Borrow from './components/borrow';
 import Press from './components/press';
-import Login from './components/login'
+import Login from './components/login';
 
 import 'antd/dist/antd.css';
 
@@ -20,26 +21,64 @@ export default class Root extends React.Component {
         super();
         this.state ={
             menukey:1,
-            login: false
+            login: false,
+            user:{
+              account:'',
+              password:''
+            },
+            press:[]
         }
         this.handleMenu = this.handleMenu.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.handlePress = this.handlePress.bind(this);
+        this.getPress = this.getPress.bind(this);
+    }
+    componentWillMount () {
+        this.getPress(); 
+        this.handlePress();
+    }
+    getPress () {
+      let baseUrl = 'http://localhost:3000/admin/';
+      let that = this;
+      $.ajax({
+          url: baseUrl + 'getPresses',
+          type: 'get',
+          dataType:"json",
+          success:function(data){
+            data.result?that.setState({press: data.message}):alert(data.message);    
+          }
+      });
+    }
+    handleLogin (user) {
+      this.setState({user: user});
+      $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
+      let baseUrl = 'http://localhost:3000/admin/';
+      let that = this;
+      $.ajax({
+          url: baseUrl + 'login',
+          type: 'post',
+          data: user,
+          dataType:"json",
+          success:function(data){
+            data.result?that.setState({login: true}):alert(data.message);    
+          }
+      });
     }
 
-
     handleMenu (item) {
-        this.setState({menukey : item.key});
+      this.setState({menukey : item.key});
+    }
+
+    handlePress (press) {
+      this.setState({press: press});
     }
 
 	render() {
-        
-
+      
 		return (
         <div>
-        {(()=>{
-            if(!this.state.login)
-              return  <Login />
-            else 
-              return 
+            {!this.state.login?
+            <Login login={this.handleLogin}/>:
             <Layout className="layout">
             <Header>
               <div className="logo" />
@@ -59,26 +98,24 @@ export default class Root extends React.Component {
             <Content style={{ padding: '0 50px' }}>
 
               <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
+                <Breadcrumb.Item>图书管理系统</Breadcrumb.Item>
+                <Breadcrumb.Item>图书管理员</Breadcrumb.Item>
               </Breadcrumb>
               {(() => {
                 if (this.state.menukey == 1)
-                    return  <Book />
-                 else if (this.state.menukey == 2)
+                    return  <Book press={this.state.press}/>
+                  else if (this.state.menukey == 2)
                     return <Reader />
-                 else if (this.state.menukey == 3)
+                  else if (this.state.menukey == 3)
                     return <Borrow />
-                 else 
+                  else 
                     return <Press />
               })()}
             </Content>
             <Footer style={{ textAlign: 'center' }}>
               BookSystem ©2017 Created by Chennnnnn
             </Footer>
-          </Layout>
-      })()}
+            </Layout>}
         </div>
 		);
 	};
