@@ -31,7 +31,7 @@ let create = (req, res) => {
     } else if (req.body.password === ''){
         res.json({
             result: false,
-            message: '读者名不能为空'
+            message: '密码不能为空'
         });
     } else {
        readerModel.select({
@@ -100,7 +100,6 @@ let borrow = (req, res) => {
         });
         
     }
-
     let book = (error, results) => {
         if (error) throw error;
         if (!results.length) {

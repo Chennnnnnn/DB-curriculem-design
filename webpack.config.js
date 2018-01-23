@@ -5,7 +5,7 @@ var path = require('path');
 module.exports = {
   context: path.join(__dirname),
   devtool: debug ? "inline-sourcemap" : null,
-  entry: "./src/js/reader.js",
+  entry: "./src/js/admin.js",
   module: {
     loaders: [
       {
@@ -37,7 +37,7 @@ module.exports = {
   },
   output: {
     path: __dirname,
-    filename: "./src/dist/reader.js"
+    filename: "./src/dist/admin.js"
   },
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),

@@ -8,7 +8,7 @@ import check from '../middlewares/check';
 
 export default function routers(app) {
     //读者注册
-    app.post('/reader/register', check.checkNotLogin,reader.create);
+    app.post('/reader/register',reader.create);
     //读者登录
     app.post('/reader/login',reader.login);
     //登出
