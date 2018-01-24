@@ -1,28 +1,42 @@
 import connection from '../lib/mysqlconnect';
-import bookModel from '../models/book';
+import {query} from '../models/index'
 
-let getAllBook = (req,res) => {
-    let select = `select Bno,Bname,Baddress,Bstate,book.Pno,Pname
+
+
+const getAllBook = (req,res) => {
+    const sql = `select Bno,Bname,Baddress,Bstate,book.Pno,Pname
                   from book,press
                   where book.Pno = press.Pno`;
-    connection.query(select,(error, results) => {
-        if(error) throw error;
+    query(sql)
+    .then((results) => {
         res.json({
             result : true,
             message: results
+        })
+    }).catch((err) => {
+        res.json({
+            result : false,
+            message: '连接错误'
         })
     })
 }
 
-let selectBook = (req,res) => {
-    let callback = (error, results) => {
-        if(error) throw error;
+const selectBook = (req,res) => {
+    const sql = `select book.Pno,Bname,Bstate,Baddress,Pname,Bno
+               from book,press 
+               where Bname like "%${req.body.Bname}%" and book.Pno = press.Pno`;
+    query(sql)
+    .then((results) => {
         res.json({
             result : true,
             message: results
         })
-    }
-    bookModel.selectbyname(req.body,callback);
+    }).catch((err) => {
+        res.json({
+            result : false,
+            message: '连接错误'
+        })
+    })
 }
 
 

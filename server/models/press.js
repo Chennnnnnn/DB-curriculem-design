@@ -41,9 +41,9 @@ let update =  (press) => {
         })
 };
 
-export default{
-    insert,
-    select,
-    remove,
-    update
-};
+// export default{
+//     insert,
+//     select,
+//     remove,
+//     update
+// };

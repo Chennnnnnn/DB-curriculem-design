@@ -1,4 +1,4 @@
-import connection from '../lib/mysqlconnect';
+import query from '../lib/mysqlconnect';
 
 
 //增,{Bname, Pno, Baddress}，callback获取Bno
@@ -51,10 +51,10 @@ let update = function (book,callback) {
 };
 
 
-export default {
-    insert,
-    selectbyname,
-    selectbyno,
-    remove,
-    update,  //查询所有的图书
-};
+// export default {
+//     insert,
+//     selectbyname,
+//     selectbyno,
+//     remove,
+//     update,  //查询所有的图书
+// };

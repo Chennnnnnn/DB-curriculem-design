@@ -42,9 +42,9 @@ let update = (reader) => {
     )
 };
 
-export default {
-    insert,
-    select,
-    remove,
-    update
-};
+// export default {
+//     insert,
+//     select,
+//     remove,
+//     update
+// };

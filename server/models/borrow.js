@@ -54,10 +54,10 @@ let update = (borrow) => {
         })
 };
 
-export default {
-    insert,
-    selectbyreader,
-    selectbybook,
-    remove,
-    update
-};
+// export default {
+//     insert,
+//     selectbyreader,
+//     selectbybook,
+//     remove,
+//     update
+// };

@@ -7,8 +7,7 @@ import check from '../middlewares/check';
 
 
 export default function routers(app) {
-    //读者注册
-    app.post('/reader/register',reader.create);
+    
     //读者登录
     app.post('/reader/login',reader.login);
     //登出
@@ -35,7 +34,9 @@ export default function routers(app) {
     app.get('/admin/getPresses',admin.getPress);
     // 修改出版社信息
     // app.post('/admin/updatePresses',check.checkAdmin,admin.updatePresses);
-
+    //读者注册
+    app.post('/reader/register',admin.addReader);
+    
 
     // 查看全部的借阅记录
     app.get('/admin/getBorrows',admin.getBorrows);
