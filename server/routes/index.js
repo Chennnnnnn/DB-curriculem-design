@@ -24,26 +24,22 @@ export default function routers(app) {
     app.get('/admin/logout',admin.logout);
 
     // 添加图书
-    app.post('/admin/addBook',admin.addBook);
-    // 修改图书位置，出版社
-    // app.post('/admin/updateBook',check.checkAdmin,admin.updateBook);
+    app.post('/admin/addBook',check.checkAdmin,admin.addBook);
 
     // 添加出版社
-    app.post('/admin/addPress',admin.addPress);
+    app.post('/admin/addPress',check.checkAdmin,admin.addPress);
     // 出版社信息
-    app.get('/admin/getPresses',admin.getPress);
-    // 修改出版社信息
-    // app.post('/admin/updatePresses',check.checkAdmin,admin.updatePresses);
+    app.get('/admin/getPresses',check.checkAdmin,admin.getPress);
     //读者注册
-    app.post('/reader/register',admin.addReader);
+    app.post('/reader/register',check.checkAdmin,admin.addReader);
     
 
     // 查看全部的借阅记录
-    app.get('/admin/getBorrows',admin.getBorrows);
+    app.get('/admin/getBorrows',check.checkAdmin,admin.getBorrows);
     //修改图书状态，删除借阅记录，帮读者还书
-    app.post('/admin/returnBook',admin.returnBook);
+    app.post('/admin/returnBook',check.checkAdmin,admin.returnBook);
     //查看全部读者
-    app.get('/admin/getReaders',admin.getReaders);
+    app.get('/admin/getReaders',check.checkAdmin,admin.getReaders);
 
     // 公共接口
     app.get('/getAllBooks',publi.getAllBook)

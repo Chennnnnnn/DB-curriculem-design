@@ -1,32 +1,33 @@
 let checkLogin = function checkLogin(req, res, next) {
     if (!req.session.userid) {
-        res.json({
+        return res.json({
             result: false,
             message: '未登录'
         });
-    } else {
-        next();
-    }
-    
+    } 
+    next();
+     
 }
 
 let checkNotLogin = function checkNotLogin(req, res, next) {
     if (req.session.userid) {
-        res.json({
+        return res.json({
             result: false,
             message: '已登录'
         });
-    } 
+    }
     next();
+      
 }
 let checkAdmin = function checkAdmin (req, res, next) {
     if (req.session.userid  !== 'admin') {
-        res.json({
+        return res.json({
             result: false,
             message: '暂无权限'
         });
     } 
-    next();
+    next()
+ 
 }
 
 export default {

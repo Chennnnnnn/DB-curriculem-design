@@ -35,7 +35,7 @@ const insert = (insert, obj) => {
     })
 }
 
-export default {
+export  {
     query,
     insert
 };

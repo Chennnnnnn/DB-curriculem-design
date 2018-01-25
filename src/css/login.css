@@ -1,13 +1,13 @@
 #login{
-    width:100%;
-    height:602px;
+    /* width:100%;
+    height:602px; */
     /* background-image:url(http://img0.imgtn.bdimg.com/it/u=252425940,257883462&fm=27&gp=0.jpg);
     background-repeat: no-repeat;
     background-size: cover; */
     background-color: #0e0e3b
 
 }
-.center{
+/* .center{
     position: absolute;
     top: 35%;
     height: 50%;
@@ -21,7 +21,19 @@
 }
 #login>.center h2,#login>.center h6{
     color: rgb(255,255,255) 
-}
-#login .row{
+} */
+/* #login .row{
     margin: 10px 0px;
+} */
+.login-form {
+  max-width: 300px ;
+  position: absolute;
+  left: 40%;
+  top: 40%;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
 }

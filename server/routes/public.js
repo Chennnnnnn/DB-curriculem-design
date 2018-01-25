@@ -7,6 +7,7 @@ const getAllBook = (req,res) => {
     const sql = `select Bno,Bname,Baddress,Bstate,book.Pno,Pname
                   from book,press
                   where book.Pno = press.Pno`;
+    console.log(query)
     query(sql)
     .then((results) => {
         res.json({
@@ -22,6 +23,7 @@ const getAllBook = (req,res) => {
 }
 
 const selectBook = (req,res) => {
+    console.log(req.body)
     const sql = `select book.Pno,Bname,Bstate,Baddress,Pname,Bno
                from book,press 
                where Bname like "%${req.body.Bname}%" and book.Pno = press.Pno`;

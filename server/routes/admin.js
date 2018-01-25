@@ -58,7 +58,7 @@ const addBook = (req, res) => {
         })
     } 
 
-    const create = 'insert into borrow set ?'
+    const create = 'insert into book set ?'
     insert(create,Object.assign(req.body, { Bstate: '可借出'}))
     .then((results) => {
         res.json({
@@ -81,7 +81,7 @@ const addPress = (req, res) => {
         const create = 'insert into press set ?'
         const presses = query(select);
         if (!presses.length) {
-            insert(create,Object.assign(req.body, { Bstate: '可借出'}))
+            insert(create,req.body)
             .then((results) => {
                 res.json({
                     result: true,
@@ -96,7 +96,9 @@ const addPress = (req, res) => {
                 messageL: '已存在该出版社'
             })
         } 
-    })()    
+    })().catch((err) => {
+        console.log('err',err.message)
+    })    
 }
 
 
@@ -126,14 +128,14 @@ const getBorrows = (req, res) => {
     const select = `select Bono,borrow.Bno,borrow.Rno,Bdate,Bname,Rname
                   from borrow,book,reader
                   where borrow.Bno = book.Bno
-                  and borrow.Rno =  reader.Rno`
+                  and borrow.Rno =  reader.Rno`;
     query(select)
     .then((results) => {
         res.json({
             result: true,
             message: results
         })
-    }).catch((err => {
+    }).catch((err) => {
         console.log(err.message)
     })
 }
@@ -146,21 +148,21 @@ req.Bono
 */
 const returnBook = (req, res) => {
 
-    const removeBorrow = `deconste from borrow where Bono = "${req.body.Bono}"`;
+    const removeBorrow = `delete from borrow where Bono = "${req.body.Bono}"`;
     const updateBook =  'update book set  Bstate = ? where Bno = ?';
     (async() => {
         const borrows = await query(`select * from borrow where Bono = "${req.body.Bono}"`)
         // 删除借阅记录
         await query(removeBorrow);
         // 修改图书信息
-        await insert(updateBook,['可借阅', results[0].Bno]).then((results) => {
+        await insert(updateBook,['可借阅', borrows[0].Bno]).then((results) => {
             res.json({
                 result: true,
                 message: '还书成功'
             })
         })
     })().catch((err) => {
-        console.log(err.messsage)
+        console.log(err)
     })
         
 }
@@ -201,7 +203,7 @@ const addReader = (req, res) => {
         const select = `select * from reader where Rname= "${Rname}"`
         const create = 'insert into reader set ?'
         const reader = await query(select);
-        if (!reader.length) {
+        if (reader.length) {
             res.json({
                 result: false,
                 message: '该账户已存在'

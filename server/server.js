@@ -25,7 +25,8 @@ app.use(express.static(__dirname + './../src'));
 // 设置跨域
 
 
-//修改请求体大小限制 
+//解析请求参数
+app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: false })); 
 //cookie,session
 app.use(cookieParser());

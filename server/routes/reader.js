@@ -10,8 +10,9 @@ import {
 2. 有，账号密码是否正确
 */
 
-const login = (res, req) => {
-    const sql = `select * from reader where Rname= "${req.body.Rname}"`
+const login = (req, res) => {
+    const sql = `select * from reader where Rname= "${req.body.Rname}"`;
+    console.dir(sql);
     (async() => {
         const reader = await query(sql);
         if (!reader.length) {
@@ -63,15 +64,16 @@ const borrow = (req, res) => {
     const seletBook = `select * from book where Bno = "${req.body.Bno}"`;
     const insertBorrow = 'insert into borrow set ?';
     const updateBook = 'update book set  Bstate = ? where Bno = ?';
-
+    console.log(1245525);
     (async() => {
         let books = await query(seletBook);
+        console.log(books);
         if (!books.length) {
             res.json({
                 result: false,
                 message: '该书不存在'
             })
-        } else if (results[0].Bstate === '已借出') {
+        } else if (books[0].Bstate === '已借出') {
             res.json({
                 result: false,
                 message: '该书已借出'
@@ -82,6 +84,7 @@ const borrow = (req, res) => {
             }, {
                 Bdate: new Date()
             }));
+            console.log('-----------');
             await insert(updateBook, ['已借出', req.body.Bno]).then((results) => {
                 res.json({
                     result: true,
@@ -89,6 +92,8 @@ const borrow = (req, res) => {
                 })
             })
         }
+    })().catch((err) => {
+        console.log('err',err);
     })
 }
 
@@ -116,7 +121,6 @@ const select = (req, res) => {
 }
 
 export default {
-    create, //注册
     login, //登录
     logout, //注销
     borrow, //借书
