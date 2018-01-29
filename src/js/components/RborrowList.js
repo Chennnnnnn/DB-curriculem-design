@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from 'axios'
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -14,23 +14,19 @@ export default class RborrowList extends React.Component {
             borrows:[],
         }
         this.getborrows = this.getborrows.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillMount () {
         this.getborrows(); 
     }
 
     getborrows () {
-      let baseUrl = 'http://localhost:3000/reader/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'getBorrowList',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
-            data.result?that.setState({ borrows:data.message}):alert(data.message);   
-          }
-      });
+       axios.get('./reader/getBorrowList')
+           .then(function({data}){
+             data.result?that.setState({borrows: data.message}):alert(data.message);    
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     render () {

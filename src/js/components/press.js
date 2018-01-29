@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input,InputNumber } from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from  'axios';
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -18,37 +18,27 @@ export default class Press extends React.Component {
         }
         this.getPress = this.getPress.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillMount () {
         this.getPress(); 
     }
     getPress () {
-      
-      let baseUrl = 'http://localhost:3000/admin/';
+
       let that = this;
-      $.ajax({
-          url: baseUrl + 'getPresses',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
-            data.result?that.setState({press: data.message}):alert(data.message);    
-          }
-      });
+      axios.get('./admin/getPresses')
+        .then(function({data}){
+            data.result?that.setState({press: data.message}):alert(data.message);        
+        }).catch(function(err){
+            console.log(err);
+        })
     }
     handleAdd () {
-      let baseUrl = 'http://localhost:3000/admin/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'addPress',
-          type: 'post',
-          dataType:"json",
-          data: {
+       axios.post('./admin/addPress',{
             Pname:this.state.Pname,
             Pphone:this.state.Pphone,
             Paddress: this.state.Paddress
-          },
-          success:function(data){
+        }).then(function({data}){
             if (data.result) {
                 that.setState({
                     Pname: '',
@@ -57,9 +47,10 @@ export default class Press extends React.Component {
                 })
                 that.getPress();       
             } 
-            alert(data.messageL);   
-          }
-      });
+            alert(data.messageL);     
+        }).catch(function(err){
+            console.log(err);
+        })
     }
 
     render () {
@@ -129,21 +120,5 @@ export default class Press extends React.Component {
     }
 }
 
-// const data = [{
-//     key: '1',
-//     Pno: 'John Brown',
-//     Pname: '￥300,000.00',
-//     Pphone: 'New York No. 1 Lake Park',
-//    }, {
-//     key: '2',
-//     Pno: 'Jim Green',
-//     Pname: '￥1,256,000.00',
-//     Pphone: 'London No. 1 Lake Park',
-//    }, {
-//     key: '3',
-//     Pno: 'Joe Black',
-//     Pname: '￥120,000.00',
-//     Pphone: 'Sidney No. 1 Lake Park',
-//    }];
 
 

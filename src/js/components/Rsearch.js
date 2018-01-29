@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from 'axios'
 import '../../css/input.css'
 
 const Search = Input.Search;
@@ -14,23 +14,17 @@ export default class Rsearch extends React.Component {
             books:[]
         }
         this.search = this.search.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
 
     search (value) {
-      let baseUrl = 'http://localhost:3000/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'searchBook',
-          type: 'post',
-          dataType:"json",
-          data:{
-              Bname: value
-          },
-          success:function(data){
+       axios.post('./searchBook',{
+            Bname: value
+        }).then(function({data}){
             data.result?that.handlebooks(data.message):alert(data.message);    
-          }
-      });
+          }).catch(function(err){
+            console.log(err);
+        })
     }
     handlebooks (message) {
         message.map((item,value) => {

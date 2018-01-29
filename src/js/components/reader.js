@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from 'axios';
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -20,23 +20,20 @@ export default class Reader extends React.Component {
         this.handleRname = this.handleRname.bind(this);
         this.handlepassword = this.handlepassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillMount () {
         this.getReaders(); 
     }
 
     getReaders () {
-      let baseUrl = 'http://localhost:3000/';
+
       let that = this;
-      $.ajax({
-          url: baseUrl + 'admin/getReaders',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
+      axios.get('./admin/getReaders')
+           .then(function({data}){
             data.result?that.handlebooks(data.message):alert(data.message);    
-          }
-      });
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     handlebooks (message) {
@@ -52,27 +49,22 @@ export default class Reader extends React.Component {
         this.setState({password: e.target.value});
     }
     handleAdd () {
-        console.log('sdfsdfsd')
         let that = this;
-        $.ajax({
-            url: 'http://localhost:3000/reader/register',
-            type: 'post',
-            data: {
-                Rname:this.state.Rname,
-                password: this.state.password
-            },
-            dataType:"json",
-            success:function(data){
-                if (data.result) {
-                    that.setState({
-                        Rname: '',
-                        password: ''
-                    })
-                    that.getReaders();       
-                } 
-                alert(data.message);   
-            }
-        });
+        axios.post('./reader/register', {
+            Rname:this.state.Rname,
+            password: this.state.password
+        }).then(function({data}){
+            if (data.result) {
+                that.setState({
+                    Rname: '',
+                    password: ''
+                })
+                that.getReaders();       
+            } 
+            alert(data.message);   
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     render () {
@@ -129,19 +121,3 @@ export default class Reader extends React.Component {
         )
     }
 }
-// const data = [{
-//     key: '1',
-//     name: 'John Brown',
-//     Bname: '￥300,000.00',
-//     address: '删除',
-//   }, {
-//     key: '2',
-//     name: 'Jim Green',
-//     Bname: '￥1,256,000.00',
-//     address: '删除',
-//   }, {
-//     key: '3',
-//     name: 'Joe Black',
-//     Bname: '￥120,000.00',
-//     address: '删除',
-//   }];

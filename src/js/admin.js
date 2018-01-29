@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import {Router, Route, hashHistory} from 'react-router';
 import {Menu, Icon, Button} from 'antd';
 import { Layout, Breadcrumb } from 'antd';
-import $ from 'jquery';
+import axios from 'axios';
+
 import Book from './components/book';
 import Reader from './components/reader';
 import Borrow from './components/borrow';
@@ -15,6 +15,7 @@ import 'antd/dist/antd.css';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const { Header, Content, Footer } = Layout;
+
 
 export default class Root extends React.Component {
     constructor(){
@@ -38,31 +39,24 @@ export default class Root extends React.Component {
         this.handlePress();
     }
     getPress () {
-      let baseUrl = 'http://localhost:3000/admin/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'getPresses',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
-            data.result?that.setState({press: data.message}):alert(data.message);    
-          }
-      });
+      axios.get('./admin/getPresses')
+          .then(function({data}){
+             data.result?that.setState({press: data.message}):alert(data.message);    
+          }).catch(function(err){
+            console.log(err);
+        })
     }
     handleLogin (user) {
       this.setState({user: user});
-      $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
-      let baseUrl = 'http://localhost:3000/admin/';
+      
       let that = this;
-      $.ajax({
-          url: baseUrl + 'login',
-          type: 'post',
-          data: user,
-          dataType:"json",
-          success:function(data){
-            data.result?that.setState({login: true}):alert(data.message);    
-          }
-      });
+      axios.post('./admin/login',user)
+           .then(function({data}){
+             data.result?that.setState({login: true}):alert(data.message);
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     handleMenu (item) {

@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import {Router, Route, hashHistory} from 'react-router';
 import {Menu, Icon, Button} from 'antd';
 import { Layout, Breadcrumb } from 'antd';
-import $ from 'jquery';
+import axios from 'axios'
 import RBook from './components/Rbook';
 import RborrowList from './components/RborrowList';
 import Rsearch from './components/Rsearch';
@@ -37,18 +36,13 @@ export default class Root extends React.Component {
 
     handleLogin (user) {
       this.setState({user: user});
-      $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
-      let baseUrl = 'http://localhost:3000/reader/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'login',
-          type: 'post',
-          data: user,
-          dataType:"json",
-          success:function(data){
-            data.result?that.setState({login: true}):alert(data.message);    
-          }
-      });
+       axios.post('./reader/login',user)
+           .then(function({data}){
+            data.result?that.setState({login: true}):alert(data.message);      
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     handleMenu (item) {

@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from 'axios'
 import '../../css/input.css'
 
 const TabPane = Tabs.TabPane;
@@ -15,24 +15,19 @@ export default class Book extends React.Component {
             books:[]
         }
         this.getAllbook = this.getAllbook.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillMount () {
         this.getAllbook(); 
     }
 
     getAllbook () {
-      $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
-      let baseUrl = 'http://localhost:3000/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'getAllBooks',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
-            data.result?that.handlebooks(data.message):alert(data.message);    
-          }
-      });
+       axios.get('./getAllBooks')
+           .then(function({data}){
+            data.result?that.handlebooks(data.message):alert(data.message);      
+          }).catch(function(err){
+            console.log(err);
+        })
     }
     handlebooks (message) {
         message.map((item,value) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input,InputNumber } from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axois from 'axios'
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -20,7 +20,6 @@ export default class Rborrow extends React.Component {
         }
         this.handleBorrow = this.handleBorrow.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillReceiveProps(nextProps) {
         let Bnos = [];
@@ -37,17 +36,13 @@ export default class Rborrow extends React.Component {
 
     handleBorrow () {
         let that = this
-        $.ajax({
-            url:'http://localhost:3000/reader/borrow',
-            type:'post',
-            datatype:'json',
-            data: {
-                Bno: that.state.Bno,
-                Rno: that.state.Rno
-            },
-            success: function (data) {
-                alert(data.message);
-            }
+         axios.post('./reader/borrow',{
+            Bno: that.state.Bno,
+            Rno: that.state.Rno
+          }).then(function({data}){
+             alert(data.message);    
+          }).catch(function(err){
+            console.log(err);
         })
     }
     render () {

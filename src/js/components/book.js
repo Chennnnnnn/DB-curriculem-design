@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from 'axios';
 import '../../css/input.css'
 
 const TabPane = Tabs.TabPane;
@@ -25,7 +25,6 @@ export default class Book extends React.Component {
         this.handleBaddress = this.handleBaddress.bind(this);
         this.handlePno = this.handlePno.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillMount () {
         this.getAllbook(); 
@@ -36,17 +35,13 @@ export default class Book extends React.Component {
     
 
     getAllbook () {
-      $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
-      let baseUrl = 'http://localhost:3000/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'getAllBooks',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
+      axios.get('./getAllBooks')
+           .then(function({data}){
             data.result?that.handlebooks(data.message):alert(data.message);    
-          }
-      });
+          }).catch(function(err){
+            console.log(err);
+        })
     }
     handlebooks (message) {
         message.map((item,value) => {
@@ -65,18 +60,12 @@ export default class Book extends React.Component {
         this.setState({Pno: value})
     }
     handleAdd(){      
-      let baseUrl = 'http://localhost:3000/admin/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'addBook',
-          type: 'post',
-          dataType:"json",
-          data: {
-              Bname: that.state.Bname,
-              Baddress: that.state.Baddress,
-              Pno: that.state.Pno
-          },
-          success:function(data){
+      axios.post('./admin/addBook',{
+            Bname: that.state.Bname,
+            Baddress: that.state.Baddress,
+            Pno: that.state.Pno
+        }).then(function({data}){
             if (data.result) {
                 that.setState({
                     Bname: '',
@@ -85,9 +74,10 @@ export default class Book extends React.Component {
                 })
                 that.getAllbook();       
             } 
-            alert('添加成功');
-          }
-      });
+            alert('添加成功');    
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     gettabs(key){
@@ -172,19 +162,3 @@ export default class Book extends React.Component {
         )
     }
 }
-// const data = [{
-//     key: '1',
-//     name: 'John Brown',
-//     money: '￥300,000.00',
-//     address: 'New York No. 1 Lake Park'
-//  }, {
-//     key: '2',
-//     name: 'Jim Green',
-//     money: '￥1,256,000.00',
-//     address: 'London No. 1 Lake Park'
-//  }, {
-//     key: '3',
-//     name: 'Joe Black',
-//     money: '￥120,000.00',
-//     address: 'Sidney No. 1 Lake Park'
-//  }];

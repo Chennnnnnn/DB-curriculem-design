@@ -2,7 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import {Select,Button,Input} from 'antd';
 import { Tabs, Table } from 'antd';
-import $ from 'jquery';
+import axios from 'axios'
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -17,24 +17,19 @@ export default class Borrow extends React.Component {
         this.getAllborrows = this.getAllborrows.bind(this);
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.haneleDelete = this.haneleDelete.bind(this);
-        $.ajaxSetup({ xhrFields: { withCredentials: true }, crossDomain: true });
     }
     componentWillMount () {
         this.getAllborrows(); 
     }
 
     getAllborrows () {
-      let baseUrl = 'http://localhost:3000/admin/';
       let that = this;
-      $.ajax({
-          url: baseUrl + 'getBorrows',
-          type: 'get',
-          dataType:"json",
-          success:function(data){
+       axios.get('./admin/getBorrows')
+           .then(function({data}){
             data.result?that.setState({ borrows:data.message}):alert(data.message);   
-            console.log(that.state.borrows) 
-          }
-      });
+          }).catch(function(err){
+            console.log(err);
+        })
     }
 
     handleChangeSelect (value) {
@@ -42,18 +37,14 @@ export default class Borrow extends React.Component {
     }
 
     haneleDelete () {
-        let baseUrl = 'http://localhost:3000/admin/';
         let that = this;
-        $.ajax({
-            url: baseUrl + 'returnBook',
-            type: 'post',
-            dataType:"json",
-            data: this.state,
-            success:function(data){
+        axios.post('./admin/returnBook',this.state)
+           .then(function({data}){
               that.getAllborrows(); 
-              alert(data.message);    
-            }
-        });
+              alert(data.message); 
+          }).catch(function(err){
+            console.log(err);
+        })
     }
     render () {
         const columns = [{
@@ -112,19 +103,3 @@ export default class Borrow extends React.Component {
         )
     }
 }
-// const data = [{
-//     key: '1',
-//     name: 'John Brown',
-//     money: '￥300,000.00',
-//     address: 'New York No. 1 Lake Park',
-//   }, {
-//     key: '2',
-//     name: 'Jim Green',
-//     money: '￥1,256,000.00',
-//     address: 'London No. 1 Lake Park',
-//   }, {
-//     key: '3',
-//     name: 'Joe Black',
-//     money: '￥120,000.00',
-//     address: 'Sidney No. 1 Lake Park',
-//   }];
