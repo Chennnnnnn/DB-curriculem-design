@@ -27,24 +27,91 @@ require('babel-register');
 // .then(v=>console.log(v))
 // .catch(e => console.log(e));
 
-const query = () => {
-	return new Promise((resolve, reject) => {
-		if(0) {
-			reject('error------');
-		} else {
-			resolve('result-------');
-		}
-	})
+// const query = () => {
+// 	return new Promise((resolve, reject) => {
+// 		if(0) {
+// 			reject('error------');
+// 		} else {
+// 			resolve('result-------');
+// 		}
+// 	})
+// }
+
+// (async() => {
+// 	var a = await query().then(function(e){
+// 		console.log(e,'e')
+// 	})
+// 	console.log(a);
+// })().catch((err) => {
+// 	console.log(err)
+// })
+
+
+function a(num, callback) {
+	callback([{...num},2]);
+} 
+
+const query = (sql) => {
+    return new Promise((resolve, reject) => {
+        a(sql, (results) => {
+            resolve(results);
+        })
+    })
 }
 
-(async() => {
-	var a = await query().then(function(e){
-		console.log(e,'e')
-	})
-	console.log(a);
-})().catch((err) => {
-	console.log(err)
-})
+// (async () => {
+// 	let result1 = await query(1)
+// 	let result2;
+// 	let result3;
+//     if (result1.length) {
+// 	  result2 = await query(result1)
+// 	}  
+// 	if (result2 && result2.length) {
+// 		result3 = await query(result2)
+// 	}  
+// 	console.log(result3); 
+// })().catch((err) => {
+//     console.log('err',err)
+// }) 
+
+
+(async () => {
+	let a = await query(2).then(function(resolve){
+		console.log('-----');
+	});
+	let b = await query(1);
+	console.log(a,b);
+})()
+
+console.log('sdsad')
+// query(2)
+// .then(function(result){	
+//     if (result) {
+//       return query(result)
+//     } 
+// })
+// .then(function(result){
+// 	if (result) {
+// 	  return query(result)
+// 	} 
+// })
+// .then(function(reslut){
+// 	console.log(reslut)
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -19,7 +19,7 @@ export default class Press extends React.Component {
         this.getPress = this.getPress.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
-    componentWillMount () {
+    componentDidMount  () {
         this.getPress(); 
     }
     getPress () {

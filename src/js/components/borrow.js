@@ -18,7 +18,7 @@ export default class Borrow extends React.Component {
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.haneleDelete = this.haneleDelete.bind(this);
     }
-    componentWillMount () {
+    componentDidMount  () {
         this.getAllborrows(); 
     }
 

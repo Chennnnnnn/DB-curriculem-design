@@ -21,7 +21,7 @@ export default class Reader extends React.Component {
         this.handlepassword = this.handlepassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
-    componentWillMount () {
+    componentDidMount  () {
         this.getReaders(); 
     }
 

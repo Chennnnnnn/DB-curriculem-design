@@ -16,7 +16,7 @@ export default class Book extends React.Component {
         }
         this.getAllbook = this.getAllbook.bind(this);
     }
-    componentWillMount () {
+    componentDidMount  () {
         this.getAllbook(); 
     }
 

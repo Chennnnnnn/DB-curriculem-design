@@ -15,7 +15,7 @@ export default class RborrowList extends React.Component {
         }
         this.getborrows = this.getborrows.bind(this);
     }
-    componentWillMount () {
+    componentDidMount  () {
         this.getborrows(); 
     }
 

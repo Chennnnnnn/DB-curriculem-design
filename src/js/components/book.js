@@ -26,7 +26,7 @@ export default class Book extends React.Component {
         this.handlePno = this.handlePno.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
-    componentWillMount () {
+    componentDidMount  () {
         this.getAllbook(); 
     }
     componentWillReceiveProps(nextProps) {
