@@ -3,11 +3,16 @@ import reader from './reader';
 import admin from './admin';
 import publi from './public';
 import check from '../middlewares/check';
+import page from './../page.generator.js';
 
 
 
 export default function routers(app) {
-    
+    app.get('/admin',function(req,res){
+        let _html = page.page.default();
+        res.end(_html);
+    })
+
     //读者登录
     app.post('/reader/login',reader.login);
     //登出
