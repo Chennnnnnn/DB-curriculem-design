@@ -4,7 +4,7 @@ import Aroot from '../../src/js/components/Aroot'
 
 export default  () =>{
     const content = renderToString(<Aroot />);
-    const _html = renderToStaticMarkup(
+    const _html = renderToString(
         <html lang="en">
         <head>
             <meta charset="UTF-8"/>

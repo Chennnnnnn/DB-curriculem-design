@@ -1,13 +1,14 @@
 require('babel-register');
-// var http = require('http');
+var http = require('http');
 
-// http.createServer(function (req,res){
-// 	res.setHeader("Cache-Control","max-age=6000");
-// 	res.setHeader("Expires","24 Jul 2018 02:43:26 GMT")
-// 	res.writeHead(200,{'Content-Type':'text/html'});
-// 	res.end('Hellow Worooold\n');
+http.createServer(function (req,res){
+	res.setHeader("Cache-Control","max-age=6000");
+	res.setHeader("Expires","24 Jul 2018 02:43:26 GMT")
+	res.writeHead(200,{'Content-Type':'text/html'});
+    res.end('Hellow Worooold\n');
+    console.log('asdas')
 
-// }).listen(1337,'127.0.0.1');
+}).listen(80,'127.0.0.1');
 
 // console.log('Server running at http://127.0.0.1:1337/');		
 
@@ -47,17 +48,17 @@ require('babel-register');
 // })
 
 
-function a(num, callback) {
-	callback([{...num},2]);
-} 
+// function a(num, callback) {
+// 	callback([{...num},2]);
+// } 
 
-const query = (sql) => {
-    return new Promise((resolve, reject) => {
-        a(sql, (results) => {
-            resolve(results);
-        })
-    })
-}
+// const query = (sql) => {
+//     return new Promise((resolve, reject) => {
+//         a(sql, (results) => {
+//             resolve(results);
+//         })
+//     })
+// }
 
 // (async () => {
 // 	let result1 = await query(1)
@@ -75,15 +76,15 @@ const query = (sql) => {
 // }) 
 
 
-(async () => {
-	let a = await query(2).then(function(resolve){
-		console.log('-----');
-	});
-	let b = await query(1);
-	console.log(a,b);
-})()
+// (async () => {
+// 	let a = await query(2).then(function(resolve){
+// 		console.log('-----');
+// 	});
+// 	let b = await query(1);
+// 	console.log(a,b);
+// })()
 
-console.log('sdsad')
+
 // query(2)
 // .then(function(result){	
 //     if (result) {
@@ -100,6 +101,16 @@ console.log('sdsad')
 // })
 
 
+
+var genCssSelector = function (eTarget) {
+	
+
+	return arr.reverse().join();
+}
+
+document.addEventListener('click',function(e){
+	console.log(genCssSelector(e.target))
+})
 
 
 
