@@ -10,6 +10,7 @@ import page from './../page.generator.js';
 export default function routers(app) {
     app.get('/admin',function(req,res){
         let _html = page.page.default();
+        res.header("Content-Type", "text/html;charset=utf-8");
         res.end(_html);
     })
 

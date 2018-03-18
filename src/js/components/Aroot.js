@@ -11,6 +11,7 @@ import Press from './press';
 import Login from './login';
 
 import 'antd/dist/antd.css';
+import '../../css/index.css'
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;

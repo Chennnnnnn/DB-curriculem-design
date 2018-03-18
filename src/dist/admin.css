@@ -21042,5 +21042,18 @@ li.ant-tree-treenode-disabled > .ant-tree-node-content-wrapper:hover {
     padding: 0;
     opacity: 0;
   }
+}#components-layout-demo-top .logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255,255,255,.2);  
+    margin: 16px 24px 16px 0;
+    float: left;
+  }
+th.column-money,
+td.column-money {
+  text-align: right !important;
+}
+.ant-tabs-tab{
+  height: 50px !important;
 }
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiIuL3NyYy9kaXN0L2FkbWluLmNzcyIsInNvdXJjZVJvb3QiOiIifQ==*/

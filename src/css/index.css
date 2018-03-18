@@ -9,3 +9,6 @@ th.column-money,
 td.column-money {
   text-align: right !important;
 }
+.ant-tabs-tab{
+  height: 50px !important;
+}
